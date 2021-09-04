@@ -1,0 +1,27 @@
+variables:
+  ARTIFACT: tinyproxy
+
+stages:
+  - dockerize
+
+dockerize:
+  stage: dockerize
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/$ARTIFACT
+    TAG: latest
+  image: docker:20
+  services:
+    - docker:20-dind
+  before_script:
+    - echo -n ${CI_REGISTRY_PASSWORD} | docker login --username ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+  script:
+    - docker pull ${IMAGE}:${TAG} || true
+    - >
+      docker build
+      --cache-from ${IMAGE}:${TAG}
+      --tag ${IMAGE}:${CI_COMMIT_SHORT_SHA}
+      .
+    - docker tag ${IMAGE}:${CI_COMMIT_SHORT_SHA} ${IMAGE}:${TAG}
+    - docker push ${IMAGE}:${TAG}
+    - docker rmi ${IMAGE}:${CI_COMMIT_SHORT_SHA} ${IMAGE}:${TAG}
+    - docker rmi $(docker images ${IMAGE} -q) || true
