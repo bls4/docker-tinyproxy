@@ -3,7 +3,7 @@ FROM alpine:latest
 EXPOSE 8888
 
 RUN apk add --no-cache \
-        tinyproxy
+    tinyproxy
 
 ENTRYPOINT [ "/usr/bin/tinyproxy", "-d" ]
 
