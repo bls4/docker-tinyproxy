@@ -6,6 +6,8 @@ stages:
 
 dockerize:
   stage: dockerize
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   variables:
     IMAGE: $CI_REGISTRY_IMAGE/$ARTIFACT
     TAG: latest
@@ -18,10 +20,10 @@ dockerize:
     - docker pull ${IMAGE}:${TAG} || true
     - >
       docker build
+      --tag ${IMAGE}:${TAG}
       --cache-from ${IMAGE}:${TAG}
-      --tag ${IMAGE}:${CI_COMMIT_SHORT_SHA}
+      --network host
       .
-    - docker tag ${IMAGE}:${CI_COMMIT_SHORT_SHA} ${IMAGE}:${TAG}
     - docker push ${IMAGE}:${TAG}
-    - docker rmi ${IMAGE}:${CI_COMMIT_SHORT_SHA} ${IMAGE}:${TAG}
+    - docker rmi ${IMAGE}:${TAG}
     - docker rmi $(docker images ${IMAGE} -q) || true
