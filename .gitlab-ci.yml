@@ -25,5 +25,4 @@ dockerize:
       --network host
       .
     - docker push ${IMAGE}:${TAG}
-    - docker rmi ${IMAGE}:${TAG}
-    - docker rmi $(docker images ${IMAGE} -q) || true
+    - docker rmi -f $(docker images ${IMAGE} -q) || true
