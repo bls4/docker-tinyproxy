@@ -31,4 +31,3 @@ dockerize:
         docker push ${IMAGE}:${EXTRA_TAG}
       fi
     - docker image prune -af --filter "until=24h"
-
