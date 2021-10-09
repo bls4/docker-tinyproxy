@@ -1,5 +1,4 @@
-# tinyproxy-docker
-
+# tinyproxy
 A light-weight HTTP/HTTPS proxy daemon in Docker
 
 ```

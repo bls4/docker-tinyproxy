@@ -25,4 +25,10 @@ dockerize:
       --network host
       .
     - docker push ${IMAGE}:${TAG}
-    - docker rmi -f $(docker images ${IMAGE} -q) || true
+    - |-
+      if [ -n "${EXTRA_TAG}" ]; then
+        docker tag ${IMAGE}:${TAG} ${IMAGE}:${EXTRA_TAG}
+        docker push ${IMAGE}:${EXTRA_TAG}
+      fi
+    - docker image prune -af --filter "until=24h"
+
