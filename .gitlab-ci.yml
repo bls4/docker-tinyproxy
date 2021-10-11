@@ -30,4 +30,4 @@ dockerize:
         docker tag ${IMAGE}:${TAG} ${IMAGE}:${EXTRA_TAG}
         docker push ${IMAGE}:${EXTRA_TAG}
       fi
-    - docker image prune -af --filter "until=24h"
+    - docker image prune -af --filter "until=24h" || true
