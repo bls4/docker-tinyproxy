@@ -1,3 +1,6 @@
+include:
+  - https://gitlab.com/wrzlbrmft/gitlab-ci/-/raw/main/dockerize.yml
+
 variables:
   ARTIFACT: tinyproxy
 
@@ -5,29 +8,6 @@ stages:
   - dockerize
 
 dockerize:
-  stage: dockerize
-  rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-  variables:
-    IMAGE: $CI_REGISTRY_IMAGE/$ARTIFACT
-    TAG: latest
-  image: docker:20
+  extends: .dockerize-no-git
   services:
     - docker:20-dind
-  before_script:
-    - docker login --username ${CI_REGISTRY_USER} --password "${CI_REGISTRY_PASSWORD}" ${CI_REGISTRY}
-  script:
-    - docker pull ${IMAGE}:${TAG} || true
-    - >
-      docker build
-      --tag ${IMAGE}:${TAG}
-      --cache-from ${IMAGE}:${TAG}
-      --network host
-      .
-    - docker push ${IMAGE}:${TAG}
-    - |-
-      if [ -n "${EXTRA_TAG}" ]; then
-        docker tag ${IMAGE}:${TAG} ${IMAGE}:${EXTRA_TAG}
-        docker push ${IMAGE}:${EXTRA_TAG}
-      fi
-    - docker image prune -af --filter "until=24h" || true
