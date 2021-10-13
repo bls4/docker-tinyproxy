@@ -1,5 +1,8 @@
 include:
-  - https://gitlab.com/wrzlbrmft/gitlab-ci/-/raw/main/dockerize.yml
+  - project: wrzlbrmft/gitlab-ci
+    ref: main
+    file:
+      - dockerize.yml
 
 variables:
   ARTIFACT: tinyproxy
