@@ -28,3 +28,8 @@ See also:
 
   * http://tinyproxy.github.io/
   * https://hub.docker.com/r/wrzlbrmft/tinyproxy/tags
+
+## License
+
+The content of this repository is distributed under the terms of the
+[GNU General Public License v3](https://www.gnu.org/licenses/gpl-3.0.en.html).
